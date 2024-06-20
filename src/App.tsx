@@ -92,8 +92,8 @@ function App() {
   }
 
   const onEnter = () => {
+    console.log(correctWord)
     if (currAttempt.letterPos !== 5) return
-
     let currWord = board[currAttempt.attempt].join("").toUpperCase()
     if (!wordSet.has(currWord)) return alert("Word not found")
 

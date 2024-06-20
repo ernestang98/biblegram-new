@@ -122,7 +122,8 @@ async function generateWordSetFromWordBank(
     .then((response) => response.text())
     .then((result) => {
       const wordArr = result.toUpperCase().split("\n")
-      wordSet = new Set(wordArr)
+      const cleanedArray = wordArr.map(str => str.replace(/[\r\n]+/g, '').trim());
+      wordSet = new Set(cleanedArray)
     })
   return { wordSet }
 }

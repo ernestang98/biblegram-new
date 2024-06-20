@@ -1,9 +1,5 @@
 import Letter from "./Letter"
 
-// NOTE: will require reimporting some global objects
-// to extend this to have customizable word length or
-// number of tries.
-
 function Board() {
   return (
     <div className="board">
