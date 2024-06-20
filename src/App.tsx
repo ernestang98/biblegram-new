@@ -21,6 +21,9 @@ import Board from "./components/Board"
 import Keyboard from "./components/Keyboard"
 import GameOver from "./components/GameOver"
 
+
+import { Counter } from './components/Counter'
+
 export interface IWordleGameContext {
   board: string[][]
   setBoard: Dispatch<SetStateAction<string[][]>>
@@ -130,6 +133,7 @@ function App() {
     <div className="App">
       <nav>
         <h1>Wordle</h1>
+        <Counter />
       </nav>
       <AppContext.Provider
         value={{
