@@ -17,10 +17,6 @@ import {
   getRandomItemFromSet,
   LetterStatus,
 } from "./helpers"
-import Board from "./components/Board"
-import Keyboard from "./components/Keyboard"
-import GameOver from "./components/GameOver"
-
 
 import { Counter } from './components/Counter'
 import BiblegramBoard from "./components/BiblegramBoard"

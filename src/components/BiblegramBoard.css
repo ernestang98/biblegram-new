@@ -15,7 +15,8 @@
     text-transform: uppercase;
 }
 
-.letter-component {
+.letter-container {
+    position: relative;
     width: 40px;
     height: 40px;
     margin: 5px;
@@ -27,6 +28,55 @@
     border-radius: 4px;
     text-transform: uppercase;
     background-color: #615cff;
+}
+
+.main-letter {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    border: 2px solid #000;
+    border-radius: 4px;
+    text-transform: uppercase;
+    background-color: #615cff;
+}
+
+.small-r {
+    position: absolute;
+    bottom: -18px; /* Adjust the position relative to the main letter */
+    left: 50%; /* Center the small 'r' horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    font-size: 12px; /* Example font size */
+}
+
+/* .letter-component {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    border: 2px solid #000;
+    border-radius: 4px;
+    text-transform: uppercase;
+    background-color: #615cff;
+} */
+
+.non-letter-component {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-size: 24px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    background-color: #34bb6c;
 }
 
 .letter-component.selected {
