@@ -6,6 +6,8 @@ Changes
 
 - migrate to redux https://redux.js.org/usage/migrating-to-modern-redux
 
+https://github.com/reduxjs/redux/blob/master/examples/counter-ts/src/index.tsx
+
 Environment
 
 - npm  8.19.4

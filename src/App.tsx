@@ -23,6 +23,7 @@ import GameOver from "./components/GameOver"
 
 
 import { Counter } from './components/Counter'
+import BiblegramBoard from "./components/BiblegramBoard"
 
 export interface IWordleGameContext {
   board: string[][]
@@ -132,10 +133,9 @@ function App() {
   return (
     <div className="App">
       <nav>
-        <h1>Wordle</h1>
-        <Counter />
+        <h1>Biblegram</h1>
       </nav>
-      <AppContext.Provider
+      {/* <AppContext.Provider
         value={{
           board,
           setBoard,
@@ -157,7 +157,8 @@ function App() {
           <Board />
           {gameOver.gameOver ? <GameOver /> : <Keyboard />}
         </div>
-      </AppContext.Provider>
+      </AppContext.Provider> */}
+      <BiblegramBoard/>
     </div>
   )
 }
