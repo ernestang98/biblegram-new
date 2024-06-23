@@ -11,7 +11,7 @@ const BiblegramBoardNonLetter: React.FC<BiblegramBoardNonLetterProps> = ({ lette
     return (
         <div
             ref={letterRef}
-            className={`non-letter-component`}
+            className={`non-letter-component ${letter === " " ? 'non-letter-component-space': 'non-letter-component-non-space'}`}
         >
             {letter}
         </div>

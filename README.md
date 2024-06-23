@@ -15,3 +15,10 @@ Environment
 - node 16.20.2
 
 - yarn 1.22.22
+
+
+### For everybody's learning
+
+- [React useCallback()](https://www.youtube.com/watch?v=MxIPQZ64x0I&ab_channel=CosdenSolutions) 
+
+    - I think it's a wrapper to prevent rerendering of react components?

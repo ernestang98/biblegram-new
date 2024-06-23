@@ -3,22 +3,23 @@ import { RootState, AppThunk } from './store'
 
 export interface BiblegramState {
   level: number
-  answers: Array<String>
-  actualHints: Array<Array<String>> // ciphered hints will be any hints which are not actual hints as per https://xiaoburner.github.io/biblegram/
-  stringHints: Array<String>
-  currentGuess: Array<String>
+  answers: Array<string>
+  actualHints: Array<Array<string>> // ciphered hints will be any hints which are not actual hints as per https://xiaoburner.github.io/biblegram/
+  stringHints: Array<string>
+  currentGuess: Array<string>
   isSolved: Boolean
+  currentIndexRef: number
 }
 
 const initialState: BiblegramState = {
   level: 0,
   answers: [
-    "For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life",
+    "For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life".toUpperCase(),
     "The Lord is my shepherd; I shall not want",
     "I can do all things through Christ who strengthens me"
   ],
   actualHints: [
-    ["F", "G", "L", "B"],
+    ["F", "G", "L", "B", "R", "E"],
     ["T", "O"],
     ["I", "C", "D"]
   ],
@@ -30,7 +31,8 @@ const initialState: BiblegramState = {
   currentGuess: [
 
   ],
-  isSolved: false
+  isSolved: false,
+  currentIndexRef: 0
 }
 
 export const biblegramSlice = createSlice({
@@ -56,6 +58,10 @@ export const biblegramSlice = createSlice({
       } else {
         state.isSolved = false
       }
+    },
+
+    setCurrentIndexRef: (state, action) => {
+      state.currentIndexRef = action.payload.currentIndexRef
     }
   },
   extraReducers: builder => {
@@ -64,7 +70,8 @@ export const biblegramSlice = createSlice({
 
 export const { 
   setCharacter,
-  verifyGuessWithAnswer
+  verifyGuessWithAnswer,
+  setCurrentIndexRef
 } = biblegramSlice.actions
 
 export const getLevel = (state: RootState) => state.biblegram.level
@@ -73,5 +80,6 @@ export const getActualHints = (state: RootState) => state.biblegram.actualHints[
 export const getStringHints = (state: RootState) => state.biblegram.stringHints[state.biblegram.level]
 export const getCurrentGuess = (state: RootState) => state.biblegram.currentGuess
 export const getIsSolved = (state: RootState) => state.biblegram.isSolved
+export const getCurrentIndexRef = (state: RootState) => state.biblegram.currentIndexRef
 
 export default biblegramSlice.reducer

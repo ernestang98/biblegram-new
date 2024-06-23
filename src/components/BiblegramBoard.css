@@ -1,47 +1,40 @@
 .biblegram-board {
+    margin: 40px 0 0 0;
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Center align horizontally */
+    align-items: center;    /* Center align vertically */
+    gap: 40px 0px;              /* Space between items */
+    /* border: 1px solid #ccc;  */
+    padding: 50px;          /* Optional: Padding around the container */
+    /* background-color: #3bcc5a; */
 }
 
-.biblegram-cell {
-    width: 40px;
-    height: 40px;
-    margin: 5px;
-    text-align: center;
-    font-size: 24px;
-    border: 2px solid #000;
-    border-radius: 4px;
-    text-transform: uppercase;
-}
 
 .letter-container {
     position: relative;
-    width: 40px;
-    height: 40px;
-    margin: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    border: 2px solid #000;
-    border-radius: 4px;
-    text-transform: uppercase;
-    background-color: #615cff;
 }
 
-.main-letter {
-    width: 40px;
+.letter-component {
+    width: 25px;
     height: 40px;
-    margin: 5px;
+    margin: 0px 1px 0px 1px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
-    border: 2px solid #000;
+    font-size: 20px;
+    border: 2px solid #8d373700;
     border-radius: 4px;
     text-transform: uppercase;
-    background-color: #615cff;
+    /* background-color: #ff5c5c; */
+}
+
+.letter-component.selected {
+    border-color: #000000;
+}
+
+.letter-component:focus {
+    border-color: #ffffff; /* Change border color on focus */
 }
 
 .small-r {
@@ -52,37 +45,22 @@
     font-size: 12px; /* Example font size */
 }
 
-/* .letter-component {
-    width: 40px;
+.non-letter-component {
     height: 40px;
-    margin: 5px;
+    margin: 0px 1px 0px 1px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
-    border: 2px solid #000;
+    font-size: 20px;
     border-radius: 4px;
     text-transform: uppercase;
-    background-color: #615cff;
-} */
-
-.non-letter-component {
-    width: 40px;
-    height: 40px;
-    margin: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    font-size: 24px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    background-color: #34bb6c;
 }
 
-.letter-component.selected {
-    border-color: #ffa0a0;
+.non-letter-component-space {
+    width: 50px;
 }
 
-.letter-component:focus {
-    border-color: #007bff; /* Change border color on focus */
+.non-letter-component-non-space {
+    width: 25px;
+    background-color: #82828229;
 }

@@ -1,13 +1,15 @@
 import { useAppSelector, useAppDispatch } from '../hooks/hooks'
 import {
     setCharacter,
+    setCurrentIndexRef,
     verifyGuessWithAnswer,
     getLevel,
     getAnswer,
     getActualHints,
     getStringHints,
     getCurrentGuess,
-    getIsSolved
+    getIsSolved,
+    getCurrentIndexRef
 } from '../store/biblegramSlice'
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
@@ -65,9 +67,9 @@ function findUniqueChars(text: string) {
 
 function BiblegramBoard() {
 
-    const hiddenAnswer = "THIS IS ME, I AM ME"; // T H I S M E A 
-    const hiddenClues = ["M", "E"]; // T H I S A will be ciphered
-
+    const hiddenAnswer = useAppSelector(getAnswer);
+    const hiddenClues = useAppSelector(getActualHints);
+    const currentIndexRef = useAppSelector(getCurrentIndexRef);
 
     const [ciphers, setCiphers] = useState<string[]>([]);
     const [letters, setLetters] = useState<string[]>([]);
@@ -81,7 +83,7 @@ function BiblegramBoard() {
         setLetters((prevLetters) => {
             const newLetters = [...prevLetters];
             if (value === 'BACKSPACE') {
-                newLetters[index] = '!'; // we will use ! to mark non-filled characters
+                newLetters[index] = ' '; // we will use ! to mark non-filled characters
             } else {
                 newLetters[index] = value;
             }
@@ -90,6 +92,7 @@ function BiblegramBoard() {
                 while (!(/^[A-Za-z!]+$/.test(hiddenAnswer[nextIndex])) || variableIndices.indexOf(nextIndex) === -1) {
                     nextIndex += 1;
                     if (nextIndex >= letters.length) {
+                        nextIndex = letters.length-1
                         break
                     }
                 }
@@ -100,10 +103,12 @@ function BiblegramBoard() {
                 while (!(/^[A-Za-z!]+$/.test(hiddenAnswer[nextIndex])) || variableIndices.indexOf(nextIndex) === -1) {
                     nextIndex -= 1;
                     if (nextIndex < 0) {
+                        nextIndex = 0
                         break
                     }
                 }
                 letterRefs.current[nextIndex]?.focus();
+
             }
             return newLetters;
         });
@@ -126,13 +131,14 @@ function BiblegramBoard() {
                 setCiphers(ciphers)
             }
         }
-        // console.log(ciphers)
         // console.log(uniqueChars)
+        // console.log(ciphers)
         // console.log(hiddenClues)
         let tempVariableIndices = []
         for (let al = 0; al < answerLetters.length ; al += 1) {
             if (hiddenClues.indexOf(answerLetters[al]) === -1 && (/^[A-Za-z!@]+$/.test(answerLetters[al]))) {
                 tempVariableIndices.push(al)
+                answerLetters[al] = " "
             }
         }
         setVariableIndices(tempVariableIndices)
