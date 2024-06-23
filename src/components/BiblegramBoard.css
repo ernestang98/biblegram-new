@@ -30,11 +30,7 @@
 }
 
 .letter-component.selected {
-    border-color: #000000;
-}
-
-.letter-component:focus {
-    border-color: #ffffff; /* Change border color on focus */
+    border-color: #2ec09b;
 }
 
 .small-r {

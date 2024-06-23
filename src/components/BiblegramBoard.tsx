@@ -9,7 +9,10 @@ import {
     getStringHints,
     getCurrentGuess,
     getIsSolved,
-    getCurrentIndexRef
+    getCurrentIndexRef,
+    getDuplicateCharIndices,
+    setDuplicateCharIndices,
+    clearDuplicateCharIndices
 } from '../store/biblegramSlice'
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
@@ -65,27 +68,50 @@ function findUniqueChars(text: string) {
     return Array.from(uniqueChars); // Convert Set to Array
 }
 
+function findAllIndices(str: string, char: string) {
+    if (typeof str !== 'string' || typeof char !== 'string') {
+      throw new TypeError('Both arguments must be strings');
+    }
+    if (char.length !== 1) {
+      throw new Error('Character to find must be a single character');
+    }
+  
+    const indices = [];
+    for (let i = 0; i < str.length; i++) {
+      if (str[i] === char) {
+        indices.push(i);
+      }
+    }
+    return indices;
+}
+
 function BiblegramBoard() {
 
     const hiddenAnswer = useAppSelector(getAnswer);
     const hiddenClues = useAppSelector(getActualHints);
     const currentIndexRef = useAppSelector(getCurrentIndexRef);
+    const duplicateCharIndices = useAppSelector(getDuplicateCharIndices);
+
+    const letterRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     const [ciphers, setCiphers] = useState<string[]>([]);
     const [letters, setLetters] = useState<string[]>([]);
-
     const [variableIndices, setVariableIndices] = useState<number[]>([]);
-
-    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-    const letterRefs = useRef<(HTMLDivElement | null)[]>([]);
     
-    const handleKeyPress = useCallback((index: number, value: string) => {
+    const handleKeyPress = useCallback((index: number, value: string, currentIndexRef: number, duplicateCharIndices: Array<number>) => {
+        console.log(index)
+        console.log(currentIndexRef)
+        console.log(duplicateCharIndices)
         setLetters((prevLetters) => {
             const newLetters = [...prevLetters];
             if (value === 'BACKSPACE') {
-                newLetters[index] = ' '; // we will use ! to mark non-filled characters
+                for (let duplicate_index in duplicateCharIndices) {
+                    newLetters[duplicateCharIndices[duplicate_index]] = ' '
+                }
             } else {
-                newLetters[index] = value;
+                for (let duplicate_index in duplicateCharIndices) {
+                    newLetters[duplicateCharIndices[duplicate_index]] = value
+                }
             }
             if (value !== 'BACKSPACE' && index < letters.length) {
                 let nextIndex = index + 1;
@@ -96,6 +122,15 @@ function BiblegramBoard() {
                         break
                     }
                 }
+                const payload = {
+                    currentIndexRef: nextIndex
+                }
+                dispatch(setCurrentIndexRef(payload))
+                let duplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[nextIndex])
+                let payload2 = {
+                    duplicateCharIndices: duplicateCharIndices
+                }
+                dispatch(setDuplicateCharIndices(payload2))
                 letterRefs.current[nextIndex]?.focus();
             }
             if (value === 'BACKSPACE') {
@@ -107,19 +142,34 @@ function BiblegramBoard() {
                         break
                     }
                 }
+                const payload = {
+                    currentIndexRef: nextIndex
+                }
+                dispatch(setCurrentIndexRef(payload))
+                let duplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[nextIndex])
+                let payload2 = {
+                    duplicateCharIndices: duplicateCharIndices
+                }
+                dispatch(setDuplicateCharIndices(payload2))
                 letterRefs.current[nextIndex]?.focus();
-
             }
             return newLetters;
         });
     }, [letters.length]);
 
     const handleLetterClick = (index: number) => {
-        setSelectedIndex(index);
+        // console.log(index)
+        // dispatch(setCurrentIndexRef({ currentIndexRef: index }))
+        // let duplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[index])
+        // let payload = {
+        //     duplicateCharIndices: duplicateCharIndices
+        // }
+        // dispatch(setDuplicateCharIndices(payload))
     };
 
     const handleBoardClick = () => {
-        setSelectedIndex(null);
+        // dispatch(setCurrentIndexRef({ currentIndexRef: -1 }))
+        // dispatch(clearDuplicateCharIndices())
     };
 
     useEffect(() => {
@@ -143,6 +193,19 @@ function BiblegramBoard() {
         }
         setVariableIndices(tempVariableIndices)
         setLetters(answerLetters);
+
+        let firstSelectedValueIndex = tempVariableIndices[0]
+        let firstSelectedValue = hiddenAnswer[tempVariableIndices[0]]
+        let payload1 = {
+            currentIndexRef: firstSelectedValueIndex
+        }
+        dispatch(setCurrentIndexRef(payload1))
+        
+        let duplicateCharIndices = findAllIndices(hiddenAnswer, firstSelectedValue)
+        let payload2 = {
+            duplicateCharIndices: duplicateCharIndices
+        }
+        dispatch(setDuplicateCharIndices(payload2))
     }, [hiddenAnswer]);
 
     const dispatch = useAppDispatch()
@@ -157,7 +220,7 @@ function BiblegramBoard() {
                             index={index}
                             handleOnKeyDown={handleKeyPress}
                             handleOnClick={handleLetterClick}
-                            isSelected={index === selectedIndex}
+                            isSelected={index === currentIndexRef || duplicateCharIndices.indexOf(index) !== -1}
                             letterRef={(el: HTMLDivElement | null) => (letterRefs.current[index] = el)}
                             cipherHint={caesarCipher(hiddenAnswer[index])}
                         />

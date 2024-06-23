@@ -9,6 +9,7 @@ export interface BiblegramState {
   currentGuess: Array<string>
   isSolved: Boolean
   currentIndexRef: number
+  duplicateCharIndices: Array<number>
 }
 
 const initialState: BiblegramState = {
@@ -19,7 +20,7 @@ const initialState: BiblegramState = {
     "I can do all things through Christ who strengthens me"
   ],
   actualHints: [
-    ["F", "G", "L", "B", "R", "E"],
+    ["A", "D", "G", "L", "B", "R", "E"],
     ["T", "O"],
     ["I", "C", "D"]
   ],
@@ -32,7 +33,8 @@ const initialState: BiblegramState = {
 
   ],
   isSolved: false,
-  currentIndexRef: 0
+  currentIndexRef: 0,
+  duplicateCharIndices: []
 }
 
 export const biblegramSlice = createSlice({
@@ -62,7 +64,16 @@ export const biblegramSlice = createSlice({
 
     setCurrentIndexRef: (state, action) => {
       state.currentIndexRef = action.payload.currentIndexRef
+    },
+
+    clearDuplicateCharIndices: (state) => {
+      state.duplicateCharIndices = []
+    },
+
+    setDuplicateCharIndices: (state, action) => {
+      state.duplicateCharIndices = action.payload.duplicateCharIndices
     }
+
   },
   extraReducers: builder => {
   }
@@ -71,7 +82,9 @@ export const biblegramSlice = createSlice({
 export const { 
   setCharacter,
   verifyGuessWithAnswer,
-  setCurrentIndexRef
+  setCurrentIndexRef,
+  clearDuplicateCharIndices,
+  setDuplicateCharIndices,
 } = biblegramSlice.actions
 
 export const getLevel = (state: RootState) => state.biblegram.level
@@ -81,5 +94,6 @@ export const getStringHints = (state: RootState) => state.biblegram.stringHints[
 export const getCurrentGuess = (state: RootState) => state.biblegram.currentGuess
 export const getIsSolved = (state: RootState) => state.biblegram.isSolved
 export const getCurrentIndexRef = (state: RootState) => state.biblegram.currentIndexRef
+export const getDuplicateCharIndices = (state: RootState) => state.biblegram.duplicateCharIndices
 
 export default biblegramSlice.reducer
