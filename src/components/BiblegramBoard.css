@@ -33,6 +33,10 @@
     border-color: #2ec09b;
 }
 
+.letter-component:focus {
+    border-color: #2b00ff;
+}
+
 .small-r {
     position: absolute;
     bottom: -18px; /* Adjust the position relative to the main letter */

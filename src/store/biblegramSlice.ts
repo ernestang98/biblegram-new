@@ -7,6 +7,7 @@ export interface BiblegramState {
   actualHints: Array<Array<string>> // ciphered hints will be any hints which are not actual hints as per https://xiaoburner.github.io/biblegram/
   stringHints: Array<string>
   currentGuess: Array<string>
+  currentVariableIndices: Array<number>
   isSolved: Boolean
   currentIndexRef: number
   duplicateCharIndices: Array<number>
@@ -16,12 +17,12 @@ const initialState: BiblegramState = {
   level: 0,
   answers: [
     "For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life".toUpperCase(),
-    "The Lord is my shepherd; I shall not want",
+    "The Lord is my shepherd, I shall not want".toUpperCase(),
     "I can do all things through Christ who strengthens me"
   ],
   actualHints: [
     ["A", "D", "G", "L", "B", "R", "E"],
-    ["T", "O"],
+    ["T", "O", "A", "E"],
     ["I", "C", "D"]
   ],
   stringHints: [
@@ -29,9 +30,8 @@ const initialState: BiblegramState = {
     "Guidance and provision",
     "Empowered by Christ"
   ],
-  currentGuess: [
-
-  ],
+  currentGuess: [],
+  currentVariableIndices: [],
   isSolved: false,
   currentIndexRef: 0,
   duplicateCharIndices: []
@@ -41,15 +41,12 @@ export const biblegramSlice = createSlice({
   name: 'biblegram',
   initialState,
   reducers: {
-    /*
-    When we run this reducer, our action should give us 2 things:
-    - character we are setting
-    - indices we need to set to that character
-    */
-    setCharacter: (state, action) => {
-      for (let i = 0; i < action.payload.indices.length; i++) {
-          state.currentGuess[action.payload.indices[i]] = action.payload.character
-      }
+    setCurrentGuess: (state, action) => {
+      state.currentGuess = action.payload.currentGuess
+    },
+
+    setCurrentVariableIndices: (state, action) => {
+      state.currentVariableIndices = action.payload.currentVariableIndices
     },
 
     /*
@@ -80,11 +77,12 @@ export const biblegramSlice = createSlice({
 })
 
 export const { 
-  setCharacter,
+  setCurrentGuess,
   verifyGuessWithAnswer,
   setCurrentIndexRef,
   clearDuplicateCharIndices,
   setDuplicateCharIndices,
+  setCurrentVariableIndices
 } = biblegramSlice.actions
 
 export const getLevel = (state: RootState) => state.biblegram.level
@@ -95,5 +93,6 @@ export const getCurrentGuess = (state: RootState) => state.biblegram.currentGues
 export const getIsSolved = (state: RootState) => state.biblegram.isSolved
 export const getCurrentIndexRef = (state: RootState) => state.biblegram.currentIndexRef
 export const getDuplicateCharIndices = (state: RootState) => state.biblegram.duplicateCharIndices
+export const getCurrentVariableIndices = (state: RootState) => state.biblegram.currentVariableIndices
 
 export default biblegramSlice.reducer

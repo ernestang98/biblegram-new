@@ -1,6 +1,6 @@
 import { useAppSelector, useAppDispatch } from '../hooks/hooks'
 import {
-    setCharacter,
+    setCurrentGuess,
     setCurrentIndexRef,
     verifyGuessWithAnswer,
     getLevel,
@@ -12,7 +12,9 @@ import {
     getCurrentIndexRef,
     getDuplicateCharIndices,
     setDuplicateCharIndices,
-    clearDuplicateCharIndices
+    clearDuplicateCharIndices,
+    setCurrentVariableIndices,
+    getCurrentVariableIndices
 } from '../store/biblegramSlice'
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
@@ -91,80 +93,108 @@ function BiblegramBoard() {
     const hiddenClues = useAppSelector(getActualHints);
     const currentIndexRef = useAppSelector(getCurrentIndexRef);
     const duplicateCharIndices = useAppSelector(getDuplicateCharIndices);
+    const variableIndices = useAppSelector(getCurrentVariableIndices);
+    const currentGuess = useAppSelector(getCurrentGuess);
 
     const letterRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     const [ciphers, setCiphers] = useState<string[]>([]);
-    const [letters, setLetters] = useState<string[]>([]);
-    const [variableIndices, setVariableIndices] = useState<number[]>([]);
+    const [letters, setLetters] = useState<string[]>([]); // dont migrate to redux yet fk it
     
-    const handleKeyPress = useCallback((index: number, value: string, currentIndexRef: number, duplicateCharIndices: Array<number>) => {
-        console.log(index)
-        console.log(currentIndexRef)
-        console.log(duplicateCharIndices)
+    const handleKeyPress = useCallback((index: number, value: string, currentIndexRef: number, duplicateCharIndices: Array<number>, currentGuess: Array<string>) => {
         setLetters((prevLetters) => {
             const newLetters = [...prevLetters];
             if (value === 'BACKSPACE') {
                 for (let duplicate_index in duplicateCharIndices) {
                     newLetters[duplicateCharIndices[duplicate_index]] = ' '
                 }
-            } else {
-                for (let duplicate_index in duplicateCharIndices) {
-                    newLetters[duplicateCharIndices[duplicate_index]] = value
-                }
-            }
-            if (value !== 'BACKSPACE' && index < letters.length) {
-                let nextIndex = index + 1;
-                while (!(/^[A-Za-z!]+$/.test(hiddenAnswer[nextIndex])) || variableIndices.indexOf(nextIndex) === -1) {
-                    nextIndex += 1;
-                    if (nextIndex >= letters.length) {
-                        nextIndex = letters.length-1
-                        break
-                    }
-                }
-                const payload = {
-                    currentIndexRef: nextIndex
-                }
-                dispatch(setCurrentIndexRef(payload))
-                let duplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[nextIndex])
-                let payload2 = {
-                    duplicateCharIndices: duplicateCharIndices
-                }
-                dispatch(setDuplicateCharIndices(payload2))
-                letterRefs.current[nextIndex]?.focus();
-            }
-            if (value === 'BACKSPACE') {
                 let nextIndex = index-1;
                 while (!(/^[A-Za-z!]+$/.test(hiddenAnswer[nextIndex])) || variableIndices.indexOf(nextIndex) === -1) {
-                    nextIndex -= 1;
                     if (nextIndex < 0) {
                         nextIndex = 0
                         break
                     }
+                    nextIndex -= 1;
                 }
                 const payload = {
                     currentIndexRef: nextIndex
                 }
                 dispatch(setCurrentIndexRef(payload))
-                let duplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[nextIndex])
+                let updatedDuplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[nextIndex])
                 let payload2 = {
-                    duplicateCharIndices: duplicateCharIndices
+                    duplicateCharIndices: updatedDuplicateCharIndices
                 }
                 dispatch(setDuplicateCharIndices(payload2))
                 letterRefs.current[nextIndex]?.focus();
+            } 
+            else {
+                // set all letters with similar cipher
+                for (let duplicate_index in duplicateCharIndices) {
+                    newLetters[duplicateCharIndices[duplicate_index]] = value
+                }
+                // find nextIndex to focus on
+                let nextIndex = index + 1;
+                while (!(/^[A-Za-z!]+$/.test(hiddenAnswer[nextIndex])) || variableIndices.indexOf(nextIndex) === -1) {
+                    if (nextIndex >= letters.length) {
+                        nextIndex = letters.length-1
+                        break
+                    }
+                    nextIndex += 1;
+                }
+                // need to find next variableIndex
+                let tempIndices = findAllIndices(hiddenAnswer, hiddenAnswer[index])
+                let tempGuessToFigureOutNextIndex = [...currentGuess]
+                for (let tempIndex in tempIndices) {
+                    tempGuessToFigureOutNextIndex[tempIndices[tempIndex]] = value
+                }
+                while (true) {
+                    if (tempGuessToFigureOutNextIndex[nextIndex] === " " && variableIndices.indexOf(nextIndex) !== -1) {
+                        break
+                    }
+                    if (nextIndex >= letters.length) {
+                        nextIndex = letters.length-1
+                        break
+                    }
+                    nextIndex += 1
+                }
+
+                // edge case: if the nextIndex is a fixedIndex, then dont update it
+                if (variableIndices.indexOf(nextIndex) !== -1) {
+                    // update currentIndexRef
+                    const payload = {
+                        currentIndexRef: nextIndex
+                    }
+                    dispatch(setCurrentIndexRef(payload))
+                    // update duplicateIndices relative to currentIndexRef
+                    let updatedDuplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[nextIndex])
+                    let payload2 = {
+                        duplicateCharIndices: updatedDuplicateCharIndices
+                    }
+                    dispatch(setDuplicateCharIndices(payload2))
+                    letterRefs.current[nextIndex]?.focus();
+                }
+            }
+            dispatch(setCurrentGuess({ currentGuess: newLetters }))
+            if (newLetters.join("") === hiddenAnswer) {
+                alert("You have won!")
             }
             return newLetters;
         });
     }, [letters.length]);
 
     const handleLetterClick = (index: number) => {
-        // console.log(index)
-        // dispatch(setCurrentIndexRef({ currentIndexRef: index }))
-        // let duplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[index])
-        // let payload = {
-        //     duplicateCharIndices: duplicateCharIndices
-        // }
-        // dispatch(setDuplicateCharIndices(payload))
+        // update currentIndexRef
+        const payload = {
+            currentIndexRef: index
+        }
+        dispatch(setCurrentIndexRef(payload))
+        // update duplicateIndices relative to currentIndexRef
+        let updatedDuplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[index])
+        let payload2 = {
+            duplicateCharIndices: updatedDuplicateCharIndices
+        }
+        dispatch(setDuplicateCharIndices(payload2))
+        letterRefs.current[index]?.focus();
     };
 
     const handleBoardClick = () => {
@@ -191,8 +221,9 @@ function BiblegramBoard() {
                 answerLetters[al] = " "
             }
         }
-        setVariableIndices(tempVariableIndices)
         setLetters(answerLetters);
+        dispatch(setCurrentGuess({ currentGuess: answerLetters }))
+        dispatch(setCurrentVariableIndices({ currentVariableIndices: tempVariableIndices }))
 
         let firstSelectedValueIndex = tempVariableIndices[0]
         let firstSelectedValue = hiddenAnswer[tempVariableIndices[0]]

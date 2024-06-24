@@ -1,19 +1,10 @@
 import { useAppSelector, useAppDispatch } from '../hooks/hooks'
 import {
-    setCharacter,
-    setCurrentIndexRef,
-    verifyGuessWithAnswer,
-    getLevel,
-    getAnswer,
-    getActualHints,
-    getStringHints,
-    getCurrentGuess,
-    getIsSolved,
     getCurrentIndexRef,
     getDuplicateCharIndices,
-    setDuplicateCharIndices
+    getCurrentGuess,
 } from '../store/biblegramSlice'
-import React, { forwardRef } from 'react';
+import React from 'react';
 import './BiblegramBoard.css'
 
 
@@ -22,7 +13,7 @@ interface BiblegramBoardLetterProps {
     index: number;
     isSelected: boolean;
     letterRef: any;
-    handleOnKeyDown: (index: number, value: string, currentIndexRef: number, duplicateCharIndices: Array<number>) => void;
+    handleOnKeyDown: (index: number, value: string, currentIndexRef: number, duplicateCharIndices: Array<number>, currentGuess: Array<string>) => void;
     handleOnClick: (index: number) => void;
     cipherHint: string;
 }
@@ -31,13 +22,14 @@ const BiblegramBoardLetter: React.FC<BiblegramBoardLetterProps> = ({ letter, ind
     
     const currentIndexRef = useAppSelector(getCurrentIndexRef);
     const duplicateCharIndices = useAppSelector(getDuplicateCharIndices);
+    const currentGuess = useAppSelector(getCurrentGuess);
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
         const value = event.key.toUpperCase();
         if (value.length === 1 && /^[A-Z]$/.test(value)) {
-            handleOnKeyDown(index, value, currentIndexRef, duplicateCharIndices);
+            handleOnKeyDown(index, value, currentIndexRef, duplicateCharIndices, currentGuess);
         } else if (event.key === 'Backspace') {
-            handleOnKeyDown(index, 'BACKSPACE', currentIndexRef, duplicateCharIndices);
+            handleOnKeyDown(index, 'BACKSPACE', currentIndexRef, duplicateCharIndices, currentGuess);
         }
     };
 

@@ -18,7 +18,6 @@ import {
   LetterStatus,
 } from "./helpers"
 
-import { Counter } from './components/Counter'
 import BiblegramBoard from "./components/BiblegramBoard"
 
 export interface IWordleGameContext {

@@ -1,10 +1,8 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
-import counterReducer from './counterSlice'
 import biblegramReducer from './biblegramSlice'
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
     biblegram: biblegramReducer
   }
 })
