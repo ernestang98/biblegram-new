@@ -1,7 +1,7 @@
 {
   "name": "biblegram",
   "version": "0.1.0",
-  "homepage": "https://ernestang98.github.io/biblegram",
+  "homepage": "https://ernestang98.github.io/biblegram-new",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.5",
