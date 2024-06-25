@@ -18,6 +18,7 @@ nav {
   height: 3.75em;
   width: 100vw;
   margin: auto;
+  padding: 20px 0px;
   border-bottom: 2px solid lightgrey;
   display: grid;
   place-items: center;

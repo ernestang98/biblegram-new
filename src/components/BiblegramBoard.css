@@ -1,5 +1,5 @@
 .biblegram-board {
-    margin: 40px 0 0 0;
+    margin: 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start; /* Center align horizontally */
@@ -8,6 +8,8 @@
     /* border: 1px solid #ccc;  */
     padding: 50px;          /* Optional: Padding around the container */
     /* background-color: #3bcc5a; */
+    height: 70%;
+    overflow: scroll;
 }
 
 
