@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/biblegram/static/css/main.d88240b4.css",
+    "main.js": "/biblegram/static/js/main.1db1b18a.js",
+    "static/js/453.b0e2bee4.chunk.js": "/biblegram/static/js/453.b0e2bee4.chunk.js",
+    "index.html": "/biblegram/index.html",
+    "main.d88240b4.css.map": "/biblegram/static/css/main.d88240b4.css.map",
+    "main.1db1b18a.js.map": "/biblegram/static/js/main.1db1b18a.js.map",
+    "453.b0e2bee4.chunk.js.map": "/biblegram/static/js/453.b0e2bee4.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d88240b4.css",
+    "static/js/main.1db1b18a.js"
+  ]
+}
