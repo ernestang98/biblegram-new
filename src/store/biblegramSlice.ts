@@ -14,7 +14,7 @@ export interface BiblegramState {
 }
 
 const initialState: BiblegramState = {
-  level: 0,
+  level: 1,
   answers: [
     "For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life".toUpperCase(),
     "The Lord is my shepherd, I shall not want".toUpperCase(),

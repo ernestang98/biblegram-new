@@ -116,16 +116,19 @@ function BiblegramBoard() {
                     }
                     nextIndex -= 1;
                 }
-                const payload = {
-                    currentIndexRef: nextIndex
+                // edge case: if the nextIndex is a fixedIndex, then dont update it
+                if (variableIndices.indexOf(nextIndex) !== -1) {
+                    const payload = {
+                        currentIndexRef: nextIndex
+                    }
+                    dispatch(setCurrentIndexRef(payload))
+                    let updatedDuplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[nextIndex])
+                    let payload2 = {
+                        duplicateCharIndices: updatedDuplicateCharIndices
+                    }
+                    dispatch(setDuplicateCharIndices(payload2))
+                    letterRefs.current[nextIndex]?.focus();
                 }
-                dispatch(setCurrentIndexRef(payload))
-                let updatedDuplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[nextIndex])
-                let payload2 = {
-                    duplicateCharIndices: updatedDuplicateCharIndices
-                }
-                dispatch(setDuplicateCharIndices(payload2))
-                letterRefs.current[nextIndex]?.focus();
             } 
             else {
                 // set all letters with similar cipher

@@ -8,6 +8,7 @@ function App() {
         <h1>Biblegram</h1>
       </nav>
       <BiblegramBoard/>
+        <h1>Keyboard</h1>
     </div>
   )
 }
