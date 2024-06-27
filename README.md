@@ -22,3 +22,8 @@ Environment
 - [React useCallback()](https://www.youtube.com/watch?v=MxIPQZ64x0I&ab_channel=CosdenSolutions) 
 
     - I think it's a wrapper to prevent rerendering of react components?
+
+
+https://github.com/gitname/react-gh-pages
+
+https://stackoverflow.com/questions/60909402/how-to-exclude-disable-redux-devtools-in-production-build-or-disconnect/64745088?noredirect=1#comment116882757_64745088

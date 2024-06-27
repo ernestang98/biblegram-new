@@ -1,5 +1,7 @@
 import "./App.css"
 import BiblegramBoard from "./components/BiblegramBoard"
+import BiblegramKeyboard from "./components/BiblegramKeyboard"
+import { isMobile } from "./helpers"
 
 function App() {
   return (
@@ -8,7 +10,9 @@ function App() {
         <h1>Biblegram</h1>
       </nav>
       <BiblegramBoard/>
-        <h1>Keyboard</h1>
+      {
+        isMobile() ? <BiblegramKeyboard/> : ""
+      }
     </div>
   )
 }
