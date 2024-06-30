@@ -22,6 +22,8 @@ import './BiblegramBoard.css'
 
 import BiblegramBoardLetter from './BiblegramBoardLetter';
 import BiblegramBoardNonLetter from './BiblegramBoardNonLetter';
+import { isMobile } from '../helpers';
+import BiblegramKeyboard from './BiblegramKeyboard';
 
 function caesarCipher(text: String, shift: number = 3) {
     shift = shift % 26;
@@ -244,7 +246,7 @@ function BiblegramBoard() {
 
     const dispatch = useAppDispatch()
     return (
-        <div className="biblegram-board" onClick={handleBoardClick}>
+        <div className={`${isMobile() ? `mobile-biblegram-board`: `biblegram-board`}`} onClick={handleBoardClick}>
             {
                 letters.map((letter, index) => ( 
                     variableIndices.indexOf(index) !== -1 ?

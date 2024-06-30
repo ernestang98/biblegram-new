@@ -8,10 +8,23 @@
     /* border: 1px solid #ccc;  */
     padding: 50px;          /* Optional: Padding around the container */
     /* background-color: #3bcc5a; */
-    height: 50%;
+    height: 80%;
     overflow: scroll;
 }
 
+.mobile-biblegram-board {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Center align horizontally */
+    align-items: center;    /* Center align vertically */
+    gap: 40px 0px;              /* Space between items */
+    /* border: 1px solid #ccc;  */
+    padding: 50px;          /* Optional: Padding around the container */
+    /* background-color: #3bcc5a; */
+    height: 57.5%;
+    overflow: scroll;
+}
 
 .letter-container {
     position: relative;
@@ -36,7 +49,7 @@
 }
 
 .letter-component:focus {
-    border-color: #2b00ff;
+    border-color: #ff7878;
 }
 
 .small-r {

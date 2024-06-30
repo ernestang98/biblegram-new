@@ -1,14 +1,13 @@
 import "./App.css"
 import BiblegramBoard from "./components/BiblegramBoard"
 import BiblegramKeyboard from "./components/BiblegramKeyboard"
+import BiblegramHeader from "./components/BiblegramHeader"
 import { isMobile } from "./helpers"
 
 function App() {
   return (
     <div className="App">
-      <nav>
-        <h1>Biblegram</h1>
-      </nav>
+      <BiblegramHeader/>
       <BiblegramBoard/>
       {
         isMobile() ? <BiblegramKeyboard/> : ""
