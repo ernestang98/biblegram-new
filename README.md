@@ -1,21 +1,18 @@
-Stolen from https://github.com/jlumbroso/wordle-react-clone/tree/main/src
+# Biblegram
 
-Changes
+Mini-project so that I don't become a washed-up software engineer that doesn't how to write brainless react code :). Template adopted from [jlumbroso](https://github.com/jlumbroso/wordle-react-clone/tree/main/src)
 
-- bug fix 
+### How to play?
 
-- migrate to redux https://redux.js.org/usage/migrating-to-modern-redux
+Complete the Bible verse. Missing characters are hinted using certain cryptographic cyphers.
 
-https://github.com/reduxjs/redux/blob/master/examples/counter-ts/src/index.tsx
-
-Environment
+### Environment
 
 - npm  8.19.4
 
 - node 16.20.2
 
 - yarn 1.22.22
-
 
 ### For everybody's learning
 
@@ -27,3 +24,5 @@ Environment
 https://github.com/gitname/react-gh-pages
 
 https://stackoverflow.com/questions/60909402/how-to-exclude-disable-redux-devtools-in-production-build-or-disconnect/64745088?noredirect=1#comment116882757_64745088
+
+https://bible-api.com/?random=verse

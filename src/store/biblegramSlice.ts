@@ -11,6 +11,8 @@ export interface BiblegramState {
   isSolved: Boolean
   currentIndexRef: number
   duplicateCharIndices: Array<number>
+  ciphers: Array<string>
+  letters: Array<string>
 }
 
 const initialState: BiblegramState = {
@@ -34,7 +36,9 @@ const initialState: BiblegramState = {
   currentVariableIndices: [],
   isSolved: false,
   currentIndexRef: 0,
-  duplicateCharIndices: []
+  duplicateCharIndices: [],
+  ciphers: [],
+  letters: [],
 }
 
 export const biblegramSlice = createSlice({
@@ -69,7 +73,15 @@ export const biblegramSlice = createSlice({
 
     setDuplicateCharIndices: (state, action) => {
       state.duplicateCharIndices = action.payload.duplicateCharIndices
-    }
+    },
+
+    setCiphers: (state, action) => {
+      state.ciphers = action.payload.ciphers
+    },
+
+    setLetters: (state, action) => {
+      state.letters = action.payload.letters
+    },
 
   },
   extraReducers: builder => {
@@ -82,7 +94,9 @@ export const {
   setCurrentIndexRef,
   clearDuplicateCharIndices,
   setDuplicateCharIndices,
-  setCurrentVariableIndices
+  setCurrentVariableIndices,
+  setCiphers,
+  setLetters,
 } = biblegramSlice.actions
 
 export const getLevel = (state: RootState) => state.biblegram.level
@@ -94,5 +108,7 @@ export const getIsSolved = (state: RootState) => state.biblegram.isSolved
 export const getCurrentIndexRef = (state: RootState) => state.biblegram.currentIndexRef
 export const getDuplicateCharIndices = (state: RootState) => state.biblegram.duplicateCharIndices
 export const getCurrentVariableIndices = (state: RootState) => state.biblegram.currentVariableIndices
+export const getCiphers = (state: RootState) => state.biblegram.ciphers
+export const getLetters = (state: RootState) => state.biblegram.letters
 
 export default biblegramSlice.reducer
