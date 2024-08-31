@@ -6,7 +6,8 @@
     align-items: center;    /* Center align vertically */
     gap: 40px 0px;              /* Space between items */
     /* border: 1px solid #ccc;  */
-    padding: 50px;          /* Optional: Padding around the container */
+    padding: 25px 100px 100px 100px;          /* Optional: Padding around the container */
+    /*margin: 25px 100px 100px 100px;          /* Optional: Padding around the container */
     /* background-color: #3bcc5a; */
     height: 80%;
     overflow: scroll;
@@ -49,7 +50,7 @@
 }
 
 .letter-component:focus {
-    border-color: #ff7878;
+    border-color: #ffffff;
 }
 
 .small-r {

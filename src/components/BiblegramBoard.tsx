@@ -14,6 +14,7 @@ import {
     getLetters,
     setCiphers as setCiphers_,
     setLetters as setLetters_,
+    executeApiAndGiveMeSomeBibleVerses,
 } from '../store/biblegramSlice'
 import { useRef, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -205,38 +206,42 @@ function BiblegramBoard() {
     };
 
     useEffect(() => {
-        let answerLetters = hiddenAnswer.split('');
-        let uniqueChars: Array<any> = findUniqueChars(hiddenAnswer)
-        let tempCiphers_ = [...ciphers_]
-        for (let ul = 0 ; ul < uniqueChars.length ; ul += 1) {
-            if (hiddenClues.indexOf(uniqueChars[ul]) === -1 && /^[A-Za-z]+$/.test(uniqueChars[ul]) && ciphers_.indexOf(uniqueChars[ul]) === -1) {
-                tempCiphers_.push(uniqueChars[ul].toUpperCase())
+        dispatch(executeApiAndGiveMeSomeBibleVerses()).then(() => {
+            if (hiddenAnswer) {
+                let answerLetters = hiddenAnswer?.split('');
+                let uniqueChars: Array<any> = findUniqueChars(hiddenAnswer)
+                let tempCiphers_ = [...ciphers_]
+                for (let ul = 0 ; ul < uniqueChars.length ; ul += 1) {
+                    if (hiddenClues.indexOf(uniqueChars[ul]) === -1 && /^[A-Za-z]+$/.test(uniqueChars[ul]) && ciphers_.indexOf(uniqueChars[ul]) === -1) {
+                        tempCiphers_.push(uniqueChars[ul].toUpperCase())
+                    }
+                }
+                dispatch(setCiphers_({ ciphers: tempCiphers_ }))
+                let tempVariableIndices = []
+                let tempVariableIndices_ = []
+                for (let al = 0; al < answerLetters.length ; al += 1) {
+                    if (hiddenClues.indexOf(answerLetters[al]) === -1 && (/^[A-Za-z!@]+$/.test(answerLetters[al]))) {
+                        tempVariableIndices.push(al)
+                        tempVariableIndices_.push(al)
+                        answerLetters[al] = " "
+                    }
+                }
+                dispatch(setLetters_({ letters: answerLetters }))
+                dispatch(setCurrentGuess({ currentGuess: answerLetters }))
+                dispatch(setCurrentVariableIndices({ currentVariableIndices: tempVariableIndices }))
+                let firstSelectedValueIndex = tempVariableIndices[0]
+                let firstSelectedValue = hiddenAnswer[tempVariableIndices[0]]
+                let payload1 = {
+                    currentIndexRef: firstSelectedValueIndex
+                }
+                dispatch(setCurrentIndexRef(payload1))
+                let duplicateCharIndices = findAllIndices(hiddenAnswer, firstSelectedValue)
+                let payload2 = {
+                    duplicateCharIndices: duplicateCharIndices
+                }
+                dispatch(setDuplicateCharIndices(payload2))
             }
-        }
-        dispatch(setCiphers_({ ciphers: tempCiphers_ }))
-        let tempVariableIndices = []
-        let tempVariableIndices_ = []
-        for (let al = 0; al < answerLetters.length ; al += 1) {
-            if (hiddenClues.indexOf(answerLetters[al]) === -1 && (/^[A-Za-z!@]+$/.test(answerLetters[al]))) {
-                tempVariableIndices.push(al)
-                tempVariableIndices_.push(al)
-                answerLetters[al] = " "
-            }
-        }
-        dispatch(setLetters_({ letters: answerLetters }))
-        dispatch(setCurrentGuess({ currentGuess: answerLetters }))
-        dispatch(setCurrentVariableIndices({ currentVariableIndices: tempVariableIndices }))
-        let firstSelectedValueIndex = tempVariableIndices[0]
-        let firstSelectedValue = hiddenAnswer[tempVariableIndices[0]]
-        let payload1 = {
-            currentIndexRef: firstSelectedValueIndex
-        }
-        dispatch(setCurrentIndexRef(payload1))
-        let duplicateCharIndices = findAllIndices(hiddenAnswer, firstSelectedValue)
-        let payload2 = {
-            duplicateCharIndices: duplicateCharIndices
-        }
-        dispatch(setDuplicateCharIndices(payload2))
+        })
     }, [hiddenAnswer]);
 
     const dispatch = useAppDispatch()
@@ -244,7 +249,7 @@ function BiblegramBoard() {
         <div className={`${isMobile() ? `mobile-biblegram-board`: `biblegram-board`}`} onClick={handleBoardClick}>
             <ToastContainer />
             {
-                letters_.map((letter, index) => ( 
+                letters_?.map((letter, index) => ( 
                     variableIndices.indexOf(index) !== -1 ?
                         <BiblegramBoardLetter 
                             key={index}

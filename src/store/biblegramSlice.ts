@@ -1,5 +1,26 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState, AppThunk } from './store'
+import { giveMeBibleVerse } from '../apis/request'
+import { BibleVerseApiResponse } from '../apis/models'
+
+function countAndSortOccurrences(str: string) {
+  // Step 1: Count occurrences of each character using a Map
+  const charCount = new Map();
+  for (let char of str) {
+      if (/[a-zA-Z]/.test(char)) { // Only count alphabets
+          char = char.toLowerCase(); // Optional: ignore case sensitivity
+          charCount.set(char, (charCount.get(char) || 0) + 1);
+      }
+  }
+
+  // Step 2: Sort characters by their count in descending order
+  const sortedCharCount = new Map(
+      // @ts-ignore
+      [...charCount.entries()].sort((a, b) => b[1] - a[1])
+  );
+
+  return sortedCharCount;
+}
 
 export interface BiblegramState {
   level: number
@@ -17,21 +38,9 @@ export interface BiblegramState {
 
 const initialState: BiblegramState = {
   level: 0,
-  answers: [
-    "For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life".toUpperCase(),
-    "The Lord is my shepherd, I shall not want".toUpperCase(),
-    "I can do all things through Christ who strengthens me"
-  ],
-  actualHints: [
-    ["A", "D", "G", "L", "B", "R", "E"],
-    ["T", "O", "A", "E"],
-    ["I", "C", "D"]
-  ],
-  stringHints: [
-    "God's immense love",
-    "Guidance and provision",
-    "Empowered by Christ"
-  ],
+  answers: [],
+  actualHints: [],
+  stringHints: [],
   currentGuess: [],
   currentVariableIndices: [],
   isSolved: false,
@@ -40,6 +49,19 @@ const initialState: BiblegramState = {
   ciphers: [],
   letters: [],
 }
+
+export const executeApiAndGiveMeSomeBibleVerses = createAsyncThunk(
+  'Return 1 Random Bible Verse',
+  async () => {
+      const response = await giveMeBibleVerse()
+      if (response) {
+        return {
+            response: response.data.body
+        }
+      }
+      return null
+  }
+)
 
 export const biblegramSlice = createSlice({
   name: 'biblegram',
@@ -53,8 +75,6 @@ export const biblegramSlice = createSlice({
       state.currentVariableIndices = action.payload.currentVariableIndices
     },
 
-    /*
-    */
     verifyGuessWithAnswer: (state, action) => {
       if (state.currentGuess.join("") === state.answers[state.level]) {
         state.isSolved = true
@@ -84,7 +104,40 @@ export const biblegramSlice = createSlice({
     },
 
   },
-  extraReducers: builder => {
+  extraReducers: builders => {
+    builders.addCase(executeApiAndGiveMeSomeBibleVerses.pending, (state) => {
+      // state.loading = true
+    })
+    builders.addCase(executeApiAndGiveMeSomeBibleVerses.rejected, (state) => {
+      state.answers =  [
+        "The Lord is my shepherd, I shall not want".toUpperCase(),
+        "For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life".toUpperCase(),
+        "I can do all things through Christ who strengthens me".toUpperCase(),
+      ]
+      state.actualHints = [
+        ["T", "L", "O", "E", "I", "S"],
+        ["A", "D", "G", "L", "B", "R", "E"],
+        ["I", "C", "D"]
+      ]
+      state.stringHints = [
+        "Guidance and provision",
+        "God's immense love",
+        "Empowered by Christ"
+      ]
+    })
+    builders.addCase(executeApiAndGiveMeSomeBibleVerses.fulfilled, (state, action) => {
+      // let response: BibleVerseApiResponse = action.payload?.response
+      // let text = response.text.toUpperCase()
+      // let hint = response.reference.toUpperCase()
+      // let tempAnswers = [...state.answers]
+      // let tempActualhints = [...state.actualHints]
+      // let temphints = [...state.stringHints]
+      // tempAnswers.push(text)
+      // temphints.push(hint)
+      // state.answers = tempAnswers
+      // state.actualHints = tempActualhints
+      // state.stringHints = temphints
+    })
   }
 })
 
