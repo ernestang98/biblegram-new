@@ -2,17 +2,12 @@ import { useAppSelector, useAppDispatch } from '../hooks/hooks'
 import {
     setCurrentGuess,
     setCurrentIndexRef,
-    verifyGuessWithAnswer,
-    getLevel,
     getAnswer,
     getActualHints,
-    getStringHints,
     getCurrentGuess,
-    getIsSolved,
     getCurrentIndexRef,
     getDuplicateCharIndices,
     setDuplicateCharIndices,
-    clearDuplicateCharIndices,
     setCurrentVariableIndices,
     getCurrentVariableIndices,
     getCiphers,
@@ -20,14 +15,14 @@ import {
     setCiphers as setCiphers_,
     setLetters as setLetters_,
 } from '../store/biblegramSlice'
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './BiblegramBoard.css'
-
 import BiblegramBoardLetter from './BiblegramBoardLetter';
 import BiblegramBoardNonLetter from './BiblegramBoardNonLetter';
 import { isMobile } from '../helpers';
-import BiblegramKeyboard from './BiblegramKeyboard';
 
 function caesarCipher(text: String, shift: number = 3) {
     shift = shift % 26;
@@ -102,95 +97,10 @@ function BiblegramBoard() {
     const variableIndices = useAppSelector(getCurrentVariableIndices);
     const currentGuess = useAppSelector(getCurrentGuess);
     const letterRefs = useRef<(HTMLDivElement | null)[]>([]);
-
     const ciphers_ = useAppSelector(getCiphers);
     const letters_ = useAppSelector(getLetters);
 
-    // const [ciphers, setCiphers] = useState<string[]>([]);
-    // const [letters, setLetters] = useState<string[]>([]); // dont migrate to redux yet fk it
-    // const handleKeyPress = useCallback((index: number, value: string, currentIndexRef: number, duplicateCharIndices: Array<number>, currentGuess: Array<string>) => {
-    //     setLetters((prevLetters) => {
-    //         const newLetters = [...prevLetters];
-    //         if (value === 'BACKSPACE') {
-    //             for (let duplicate_index in duplicateCharIndices) {
-    //                 newLetters[duplicateCharIndices[duplicate_index]] = ' '
-    //             }
-    //             let nextIndex = index-1;
-    //             while (!(/^[A-Za-z!]+$/.test(hiddenAnswer[nextIndex])) || variableIndices.indexOf(nextIndex) === -1) {
-    //                 if (nextIndex < 0) {
-    //                     nextIndex = 0
-    //                     break
-    //                 }
-    //                 nextIndex -= 1;
-    //             }
-    //             // edge case: if the nextIndex is a fixedIndex, then dont update it
-    //             if (variableIndices.indexOf(nextIndex) !== -1) {
-    //                 const payload = {
-    //                     currentIndexRef: nextIndex
-    //                 }
-    //                 dispatch(setCurrentIndexRef(payload))
-    //                 let updatedDuplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[nextIndex])
-    //                 let payload2 = {
-    //                     duplicateCharIndices: updatedDuplicateCharIndices
-    //                 }
-    //                 dispatch(setDuplicateCharIndices(payload2))
-    //                 letterRefs.current[nextIndex]?.focus();
-    //             }
-    //         } 
-    //         else {
-    //             // set all letters with similar cipher
-    //             for (let duplicate_index in duplicateCharIndices) {
-    //                 newLetters[duplicateCharIndices[duplicate_index]] = value
-    //             }
-    //             // find nextIndex to focus on
-    //             let nextIndex = index + 1;
-    //             while (!(/^[A-Za-z!]+$/.test(hiddenAnswer[nextIndex])) || variableIndices.indexOf(nextIndex) === -1) {
-    //                 if (nextIndex >= letters.length) {
-    //                     nextIndex = letters.length-1
-    //                     break
-    //                 }
-    //                 nextIndex += 1;
-    //             }
-    //             // need to find next variableIndex
-    //             let tempIndices = findAllIndices(hiddenAnswer, hiddenAnswer[index])
-    //             let tempGuessToFigureOutNextIndex = [...currentGuess]
-    //             for (let tempIndex in tempIndices) {
-    //                 tempGuessToFigureOutNextIndex[tempIndices[tempIndex]] = value
-    //             }
-    //             while (true) {
-    //                 if (tempGuessToFigureOutNextIndex[nextIndex] === " " && variableIndices.indexOf(nextIndex) !== -1) {
-    //                     break
-    //                 }
-    //                 if (nextIndex >= letters.length) {
-    //                     nextIndex = letters.length-1
-    //                     break
-    //                 }
-    //                 nextIndex += 1
-    //             }
-
-    //             // edge case: if the nextIndex is a fixedIndex, then dont update it
-    //             if (variableIndices.indexOf(nextIndex) !== -1) {
-    //                 // update currentIndexRef
-    //                 const payload = {
-    //                     currentIndexRef: nextIndex
-    //                 }
-    //                 dispatch(setCurrentIndexRef(payload))
-    //                 // update duplicateIndices relative to currentIndexRef
-    //                 let updatedDuplicateCharIndices = findAllIndices(hiddenAnswer, hiddenAnswer[nextIndex])
-    //                 let payload2 = {
-    //                     duplicateCharIndices: updatedDuplicateCharIndices
-    //                 }
-    //                 dispatch(setDuplicateCharIndices(payload2))
-    //                 letterRefs.current[nextIndex]?.focus();
-    //             }
-    //         }
-    //         dispatch(setCurrentGuess({ currentGuess: newLetters }))
-    //         if (newLetters.join("") === hiddenAnswer) {
-    //             alert("You have won!")
-    //         }
-    //         return newLetters;
-    //     });
-    // }, [letters.length]);
+    const notify = () => toast("Wow so easy!");
 
     const handleKeyPress_ = (index: number, value: string) => {
         const newLetters = [...letters_];
@@ -228,10 +138,6 @@ function BiblegramBoard() {
             // find nextIndex to focus on
             let nextIndex = index + 1;
             while (!(/^[A-Za-z!]+$/.test(hiddenAnswer[nextIndex])) || variableIndices.indexOf(nextIndex) === -1) {
-                // if (nextIndex >= letters.length) {
-                //     nextIndex = letters.length-1
-                //     break
-                // }
                 if (nextIndex >= letters_.length) {
                     nextIndex = letters_.length-1
                     break
@@ -248,10 +154,6 @@ function BiblegramBoard() {
                 if (tempGuessToFigureOutNextIndex[nextIndex] === " " && variableIndices.indexOf(nextIndex) !== -1) {
                     break
                 }
-                // if (nextIndex >= letters.length) {
-                //     nextIndex = letters.length-1
-                //     break
-                // }
                 if (nextIndex >= letters_.length) {
                     nextIndex = letters_.length-1
                     break
@@ -278,7 +180,7 @@ function BiblegramBoard() {
         dispatch(setCurrentGuess({ currentGuess: newLetters }))
         dispatch(setLetters_({ letters: newLetters }))
         if (newLetters.join("") === hiddenAnswer) {
-            alert("You have won!")
+            notify()
         }
     }
 
@@ -307,9 +209,6 @@ function BiblegramBoard() {
         let uniqueChars: Array<any> = findUniqueChars(hiddenAnswer)
         let tempCiphers_ = [...ciphers_]
         for (let ul = 0 ; ul < uniqueChars.length ; ul += 1) {
-            //if (hiddenClues.indexOf(uniqueChars[ul]) === -1 && /^[A-Za-z]+$/.test(uniqueChars[ul]) && ciphers.indexOf(uniqueChars[ul]) === -1) {
-                //ciphers.push(uniqueChars[ul].toUpperCase())
-                //setCiphers(ciphers)
             if (hiddenClues.indexOf(uniqueChars[ul]) === -1 && /^[A-Za-z]+$/.test(uniqueChars[ul]) && ciphers_.indexOf(uniqueChars[ul]) === -1) {
                 tempCiphers_.push(uniqueChars[ul].toUpperCase())
             }
@@ -324,7 +223,6 @@ function BiblegramBoard() {
                 answerLetters[al] = " "
             }
         }
-        //setLetters(answerLetters);
         dispatch(setLetters_({ letters: answerLetters }))
         dispatch(setCurrentGuess({ currentGuess: answerLetters }))
         dispatch(setCurrentVariableIndices({ currentVariableIndices: tempVariableIndices }))
@@ -344,6 +242,7 @@ function BiblegramBoard() {
     const dispatch = useAppDispatch()
     return (
         <div className={`${isMobile() ? `mobile-biblegram-board`: `biblegram-board`}`} onClick={handleBoardClick}>
+            <ToastContainer />
             {
                 letters_.map((letter, index) => ( 
                     variableIndices.indexOf(index) !== -1 ?
