@@ -23,8 +23,9 @@
     /* border: 1px solid #ccc;  */
     padding: 50px;          /* Optional: Padding around the container */
     /* background-color: #3bcc5a; */
-    height: 57.5%;
+    height: 50%;
     overflow: scroll;
+    /* background-color: red; */
 }
 
 .letter-container {

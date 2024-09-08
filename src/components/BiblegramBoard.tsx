@@ -104,6 +104,8 @@ function BiblegramBoard() {
     const notify = () => toast("Wow so easy!");
 
     const handleKeyPress_ = (index: number, value: string) => {
+        console.log(index)
+        console.log(currentIndexRef)
         const newLetters = [...letters_];
         if (value === 'BACKSPACE') {
             for (let duplicate_index in duplicateCharIndices) {

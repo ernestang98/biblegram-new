@@ -6,25 +6,27 @@
   border-bottom: 2px solid lightgrey;
   display: grid;
   place-items: center;
-}
-
-/* nav {
-  height: 3.75em;
-  width: 100vw;
-  margin: auto;
-  padding: 20px 0px;
-  border-bottom: 2px solid lightgrey;
-  display: grid;
-  place-items: center;
-} */
-
-nav h1 {
-  margin: 0;
-  font-family: Helvetica, Arial, sans-serif;
-  color: white;
-  font-size: 45px;
+  nav h1 {
+    margin: 0;
+    font-family: Helvetica, Arial, sans-serif;
+    color: white;
+    font-size: 45px;
+  }
+ 
 }
 
 .mobile-biblegram-header {
-
+  height: 10%;
+  width: 100vw;
+  /* margin: auto; */
+  padding: 2.5px 0px;
+  border-bottom: 2px solid lightgrey;
+  display: grid;
+  place-items: center;
+  nav h1 {
+    margin: 0;
+    font-family: Helvetica, Arial, sans-serif;
+    color: white;
+    font-size: 25px;
+  }
 }

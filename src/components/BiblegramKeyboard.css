@@ -1,17 +1,23 @@
 .keyboard {
+  background-color: hsla(0, 0%, 100%, 0.075);
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
-  /* background-color: #edff4d; */
   height: 20%;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0 15px;
+  border-radius: 10px 10px 0px 0px;
+
 }
 
 .keyboard-row {
   display: flex;
-  gap: 5px;
+  gap: 2px;
 }
 
 .keyboard-key {
@@ -27,7 +33,7 @@
 }
 
 .keyboard-key:active {
-  background-color: #ddd;
+  background-color: #a13030;
 }
 
 .keyboard-key[disabled] {
