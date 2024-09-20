@@ -1,5 +1,6 @@
 import { useAppSelector, useAppDispatch } from '../hooks/hooks'
 import {
+    nextLevel,
     setCurrentGuess,
     setCurrentIndexRef,
     getAnswer,
@@ -101,11 +102,14 @@ function BiblegramBoard() {
     const ciphers_ = useAppSelector(getCiphers);
     const letters_ = useAppSelector(getLetters);
 
-    const notify = () => toast("Wow so easy!");
+    const notify = () => {
+        toast("Wow so easy!");
+        setTimeout(()=> {
+            dispatch(nextLevel({}))
+        }, 5000)
+    }
 
     const handleKeyPress_ = (index: number, value: string) => {
-        console.log(index)
-        console.log(currentIndexRef)
         const newLetters = [...letters_];
         if (value === 'BACKSPACE') {
             for (let duplicate_index in duplicateCharIndices) {
@@ -249,7 +253,9 @@ function BiblegramBoard() {
     const dispatch = useAppDispatch()
     return (
         <div className={`${isMobile() ? `mobile-biblegram-board`: `biblegram-board`}`} onClick={handleBoardClick}>
-            <ToastContainer />
+            {
+                isMobile() ? undefined : <ToastContainer />
+            }
             {
                 letters_?.map((letter, index) => ( 
                     variableIndices.indexOf(index) !== -1 ?

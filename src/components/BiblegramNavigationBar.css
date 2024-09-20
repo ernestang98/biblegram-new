@@ -1,0 +1,69 @@
+/* General navbar container styling */
+.navbar-container {
+  position: absolute;
+  height: 60px;
+  display: flex;
+  align-items: flex-start;
+  padding: 0 20px;
+  background-color: #333;
+  left: 0;
+}
+
+/* Hamburger icon */
+.hamburger-icon {
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  position: relative;
+  z-index: 10; /* Ensures it stays on top */
+}
+
+/* Side panel styling */
+.side-panel {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  height: 100%;
+  width: 250px;
+  background-color: #444;
+  transition: left 0.3s ease;
+  padding-top: 60px; /* To give space for the top navbar */
+  z-index: 9;
+}
+
+/* When the panel is open, it slides into view */
+.side-panel.open {
+  left: 0;
+}
+
+/* Side panel menu */
+.side-panel-menu {
+  list-style: none;
+  padding: 0;
+}
+
+.side-panel-item {
+  padding: 15px 20px;
+}
+
+.side-panel-item a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  display: block;
+}
+
+.side-panel-item a:hover {
+  background-color: #555;
+}
+
+/* Ensure that when hovered, the side panel stays open */
+.navbar-container:hover .side-panel {
+  left: 0;
+}
+
+/* Body content styling (optional) */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}

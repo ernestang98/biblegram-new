@@ -1,12 +1,12 @@
 import { isMobile } from "../helpers"
 import './BiblegramHeader.css';
+import BiblegramNavigationBar from "./BiblegramNavigationBar";
 
 function BiblegramHeader() {
     return (
         <div className={`${isMobile() ? `mobile-biblegram-header`: `biblegram-header`}`}>
-            <nav>
-                <h1>Biblegram</h1>
-            </nav>
+            <BiblegramNavigationBar/>
+            <h1>Biblegram</h1>
         </div>
     )
 }

@@ -38,10 +38,10 @@ export interface BiblegramState {
 
 const initialState: BiblegramState = {
   level: 0,
-  answers: [],
-  actualHints: [],
-  stringHints: [],
-  currentGuess: [],
+  answers: [],      // do not change this
+  actualHints: [],  // do not change this
+  stringHints: [],  // do not change this
+  currentGuess: [], 
   currentVariableIndices: [],
   isSolved: false,
   currentIndexRef: 0,
@@ -67,6 +67,33 @@ export const biblegramSlice = createSlice({
   name: 'biblegram',
   initialState,
   reducers: {
+
+    nextLevel: (state, action) => {
+      if (state.level !== state.answers.length-1) {
+        state.level = state.level+1
+        state.currentGuess = []
+        state.currentVariableIndices = []
+        state.isSolved = false
+        state.currentIndexRef = 0
+        state.duplicateCharIndices = []
+        state.ciphers = []
+        state.letters = []
+      }
+    },
+
+    changeLevel: (state, action) => {
+      if (state.level !== action.payload.level) {
+        state.level = action.payload.level
+        state.currentGuess = []
+        state.currentVariableIndices = []
+        state.isSolved = false
+        state.currentIndexRef = 0
+        state.duplicateCharIndices = []
+        state.ciphers = []
+        state.letters = []
+      }
+    },
+
     setCurrentGuess: (state, action) => {
       state.currentGuess = action.payload.currentGuess
     },
@@ -150,9 +177,12 @@ export const {
   setCurrentVariableIndices,
   setCiphers,
   setLetters,
+  changeLevel,
+  nextLevel,
 } = biblegramSlice.actions
 
 export const getLevel = (state: RootState) => state.biblegram.level
+export const getLevels = (state: RootState) => state.biblegram.answers.length
 export const getAnswer = (state: RootState) => state.biblegram.answers[state.biblegram.level]
 export const getActualHints = (state: RootState) => state.biblegram.actualHints[state.biblegram.level]
 export const getStringHints = (state: RootState) => state.biblegram.stringHints[state.biblegram.level]

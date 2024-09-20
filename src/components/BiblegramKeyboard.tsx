@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../hooks/hooks'
 import {
+  nextLevel,
   setCurrentGuess,
   setCurrentIndexRef,
   getAnswer,
@@ -16,6 +17,7 @@ import {
 } from '../store/biblegramSlice'
 import './BiblegramKeyboard.css';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface OnScreenKeyboardProps {
   // Define any props you might need here
@@ -104,7 +106,12 @@ const BiblegramKeyboard: React.FC<OnScreenKeyboardProps> = () => {
   const ciphers_ = useAppSelector(getCiphers);
   const letters_ = useAppSelector(getLetters);
 
-  const notify = () => toast("Wow so easy!");
+  const notify = () => {
+    toast("Wow so easy!");
+    setTimeout(()=> {
+        dispatch(nextLevel({}))
+    }, 5000)
+}
 
   const handleKeyPress_ = (index: number, value: string) => {
     const newLetters = [...letters_];
