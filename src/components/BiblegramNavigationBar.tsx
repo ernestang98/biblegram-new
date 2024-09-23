@@ -33,7 +33,7 @@ const BiblegramNavigationBar: React.FC = () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <i className="fas fa-bars" />
+          Levels
         </div>
         <div className={isPanelOpen ? 'side-panel open' : 'side-panel'}>
           <ul className="side-panel-menu">
